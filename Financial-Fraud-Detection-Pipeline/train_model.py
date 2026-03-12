@@ -90,8 +90,6 @@ def add_features(data: pd.DataFrame) -> pd.DataFrame:
 
     return data
 
-df = add_features(df)
-
 # ==========================================
 # 3. DATA SPLITTING & PREPROCESSING
 # ==========================================
@@ -101,9 +99,12 @@ y = df['isFraud']
 # Stratified split ensures the train and test sets have the same proportion of fraud cases
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, stratify=y, random_state=42)
 
+X_train = add_features(X_train)
+X_test = add_features(X_test)
+
 # Categorize columns based on their data types
 categorical_columns = ['type']
-numeric_columns = [col for col in X.columns if col not in categorical_columns]
+numeric_columns = [col for col in X_test.columns if col not in categorical_columns]
 
 # Set up the preprocessing steps
 preprocessor = ColumnTransformer(
